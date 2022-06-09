@@ -19,6 +19,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     #pins = db.relationship('Pin', backref='author', lazy=True)
     is_admin = db.relationship(db.Boolean)
+    #hiiiii
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
