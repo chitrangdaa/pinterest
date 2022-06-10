@@ -14,10 +14,12 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegistrationForm()
+    print("error-->", form.errors)
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password,is_admin=form.is_admin.data)
-        print(f"{user}")
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password,
+                    is_admin=form.is_admin.data)
+        print(f"user-----------------------register---->{user}")
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}! Please log-in', 'success')
