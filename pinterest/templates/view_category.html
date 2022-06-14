@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Category Id</th>
+      <th scope="col">Category Name</th>
+      <th scope="col">Delete Category</th>
+      <th scope="col">Update Category</th>
+
+
+    </tr>
+  </thead>
+    {% for category in categories %}
+  <tbody>
+    <tr>
+      <th scope="row">{{ category.id }}</th>
+      <td>{{ category.category_name }}</td>
+        <td class="delete"><a href="{{ url_for('admin.delete_category',category_id=category.id)}}">Delete</a> </td>
+        <td class="update"><a href="{{ url_for('admin.update_category',category_id=category.id)}}">Update</a> </td>
+
+
+    </tr>
+
+  </tbody>
+    {%endfor%}
+</table>
+
+{% endblock %}

@@ -4,7 +4,6 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from pinterest.config import Config
-from flask_migrate import Migrate
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -24,10 +23,13 @@ def create_app(config_class=Config):
     mail.init_app(app)
 
     from pinterest.users.routes import users
+    from pinterest.admin.routes import admin
+
     # from pinterest.posts.routes import posts
     from pinterest.main.routes import main
     # from pinterest.errors.handlers import errors
     app.register_blueprint(users)
+    app.register_blueprint(admin)
     # app.register_blueprint(posts)
     app.register_blueprint(main)
     # app.register_blueprint(errors)

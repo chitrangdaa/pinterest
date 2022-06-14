@@ -11,20 +11,17 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    is_admin = BooleanField("Are you an admin?")
+
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-
+        """for validation of unique username"""
         user = User.query.filter_by(username=username.data).first()
-        print(f'username----{username.data}')
-
-        print("query----", user)
-
         if user:
             raise ValidationError('Username is taken,please choose a different one!')
 
     def validate_email(self, email):
+        """for validation of unique email"""
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('Email is taken,please choose a different one!')
@@ -41,7 +38,6 @@ class UpdateForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-
     submit = SubmitField('Update')
 
     def validate_username(self, username):

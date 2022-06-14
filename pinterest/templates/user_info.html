@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<table class="table ">
+  <thead class="thead-light ">
+    <tr>
+      <th scope="col">User-Id</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email-Id</th>
+      <th scope="col">Total Created Pins</th>
+    </tr>
+  </thead>
+  <tbody class="table-hover">
+  {%for user in users%}
+    <tr>
+      <th scope="row">{{user.id}}</th>
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+      <td></td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+{% endblock %}

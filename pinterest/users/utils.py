@@ -7,6 +7,7 @@ from pinterest import mail
 
 
 def save_picture(form_picture):
+
     random_hex = secrets.token_hex(8)  # to change name of image file uploaded
     _, f_ext = os.path.splitext(form_picture.filename)  # to extract our image's extension
     picture_fn = random_hex + f_ext
@@ -19,6 +20,7 @@ def save_picture(form_picture):
 
 
 def send_reset_email(user):
+    """for sending reset email to user"""
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
                   sender='noreply@demo.com',

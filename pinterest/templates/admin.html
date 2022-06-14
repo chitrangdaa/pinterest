@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="list-group">
+  <a href="{{url_for('admin.view_user_info')}}" class="list-group-item list-group-item-action ">
+    User Option
+  </a>
+  <a href="{{url_for('admin.category')}}" class="list-group-item list-group-item-action">Category Option</a>
+  <a href="#" class="list-group-item list-group-item-action">Others</a>
+
+</div>
+{%endblock%}

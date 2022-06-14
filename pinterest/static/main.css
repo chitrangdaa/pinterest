@@ -1,19 +1,27 @@
 body {
-  background: #9f95c4;
-  color: #333333;
+  background: #black;
+  color: #white;
   margin-top: 5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
-
+delete{
+  color:red;
+}
+update{
+  color:darkgreen;
+}
 .bg-steel {
-  background-color: white;
+  background-color: black;
+}
+.navbar-dark .navbar-brand {
+    color: red;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #011c19;
+  color: white;
 }
 
 .site-header .navbar-nav .nav-link:hover {
