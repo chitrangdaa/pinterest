@@ -119,14 +119,20 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-# @users.route("/changepassword", methods=['GET', 'POST'])
-# def change_password():
-#     """ For changing password """
-#     if current_user.is_authenticated:
-#         return redirect(url_for('main.home'))
-#     form = ChangePasswordForm()
-#     if form.validate_on_submit():
-#         user = User(
-#             username=form.new_password.data
-#         )
-#     return render_template('change_password.html', form=form, title='change password')
+@users.route("/changepassword", methods=['GET', 'POST'])
+def change_password():
+    """ For changing password """
+    if current_user.is_authenticated:
+
+        form = ChangePasswordForm()
+        if form.validate_on_submit():
+            if bcrypt.check_password_hash(current_user.password, form.old_password.data):
+                hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+                current_user.password = hashed_password
+                db.session.commit()
+                flash("Password changed successfully", category='success')
+                return redirect(url_for('users.account'))
+            else:
+                flash("Incorrect Password,please try again",category='danger')
+                return redirect(url_for('users.change_password'))
+    return render_template('change_password.html', form=form, title='change password')
