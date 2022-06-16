@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from pinterest import db, bcrypt
 from pinterest.models import User
 from pinterest.users.forms import (RegistrationForm, LoginForm,
-                                   RequestResetForm, ResetPasswordForm, UpdateForm)
+                                   RequestResetForm, ResetPasswordForm, UpdateForm, ChangePasswordForm)
 from pinterest.users.utils import send_reset_email, save_picture
 
 users = Blueprint('users', __name__)
@@ -54,7 +54,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('admin.home'))
         else:
             flash('Login unsuccessful', 'danger')
-    return render_template('login.html', title='login',form=form)
+    return render_template('login.html', title='login', form=form)
 
 
 @users.route("/logout")
@@ -117,3 +117,16 @@ def reset_token(token):
         return redirect(url_for('users.login'))
 
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+
+# @users.route("/changepassword", methods=['GET', 'POST'])
+# def change_password():
+#     """ For changing password """
+#     if current_user.is_authenticated:
+#         return redirect(url_for('main.home'))
+#     form = ChangePasswordForm()
+#     if form.validate_on_submit():
+#         user = User(
+#             username=form.new_password.data
+#         )
+#     return render_template('change_password.html', form=form, title='change password')

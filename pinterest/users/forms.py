@@ -5,7 +5,6 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from flask_login import current_user
 from pinterest.models import User
 
-
 from pinterest.users.utils import validate_password
 
 
@@ -77,3 +76,11 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Password Reset')
+
+
+class ChangePasswordForm(FlaskForm):
+    """ For changing password"""
+    old_password = PasswordField('Please enter your original password', validators=[DataRequired()])
+    new_password = PasswordField('Please enter your new password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])
+    submit = SubmitField('Change Password')

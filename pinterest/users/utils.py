@@ -9,10 +9,7 @@ from pinterest import mail
 import re
 
 
-
-
 def save_picture(form_picture):
-
     random_hex = secrets.token_hex(8)  # to change name of image file uploaded
     _, f_ext = os.path.splitext(form_picture.filename)  # to extract our image's extension
     picture_fn = random_hex + f_ext
@@ -38,6 +35,7 @@ If you did not make this request then simply ignore this email and no changes wi
 
 
 def validate_password(self, field):
+    """password validation"""
     reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
     # compiling regex
     pat = re.compile(reg)
@@ -46,7 +44,3 @@ def validate_password(self, field):
     mat = re.search(pat, field.data)
     if not mat:
         raise ValidationError('Password is wrong,it should contain at least uppercase lowercase a digit !')
-
-
-
-
