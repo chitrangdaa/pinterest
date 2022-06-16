@@ -1,26 +1,34 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
 from pinterest.admin.forms import NewCategory
-from flask_login import login_required
+from flask_login import login_required, current_user
 from pinterest import db
 from pinterest.models import Category, User
 
 admin = Blueprint('admin', __name__)
 
 
-@admin.route("/")
 @admin.route("/adminhome")
 def home():
+    """Admin Home Page"""
+    if not current_user.is_admin:
+        abort(403)
     return render_template('admin.html')
 
 
 @admin.route("/category")
 def category():
+    """Category Home Page"""
+    if not current_user.is_admin:
+        abort(403)
     return render_template('category.html')
 
 
 @login_required
 @admin.route("/addcategory", methods=['GET', 'POST'])
 def add_category():
+    """ For adding New Category """
+    if not current_user.is_admin:
+        abort(403)
     form = NewCategory()
     if form.validate_on_submit():
         category = Category(category_name=form.category_name.data)
@@ -35,6 +43,9 @@ def add_category():
 @login_required
 @admin.route("/viewcategory", methods=['GET'])
 def view_category():
+    """ Viewing Categories """
+    if not current_user.is_admin:
+        abort(403)
     categories = Category.query.order_by(Category.category_name.asc())
     return render_template('view_category.html', categories=categories)
 
@@ -42,6 +53,9 @@ def view_category():
 @login_required
 @admin.route("/viewcategory/delete/<category_id>", methods=['GET', 'POST'])
 def delete_category(category_id):
+    """ Deleting Categories """
+    if not current_user.is_admin:
+        abort(403)
     category = Category.query.get_or_404(category_id)
     db.session.delete(category)
     db.session.commit()
@@ -49,11 +63,13 @@ def delete_category(category_id):
     return redirect(url_for('admin.view_category'))
 
 
-
 @login_required
 @admin.route("/viewcategory/update/<category_id>", methods=['GET', 'POST'])
 def update_category(category_id):
-    category =Category.query.get_or_404(category_id)
+    """Updating existing categories """
+    if not current_user.is_admin:
+        abort(403)
+    category = Category.query.get_or_404(category_id)
     form = NewCategory()
     if form.validate_on_submit():
         category.category_name = form.category_name.data
@@ -62,13 +78,14 @@ def update_category(category_id):
         return redirect(url_for('admin.view_category'))
     elif request.method == 'GET':
         form.category_name.data = category.category_name  # for filling values
-    return render_template('new_category.html',legend='Update Category',form=form)
+    return render_template('new_category.html', legend='Update Category', form=form)
+
 
 @login_required
 @admin.route("/user_info", methods=['GET', 'POST'])
 def view_user_info():
-    users=User.query.all()
-    return render_template('user_info.html',users=users)
-
-
-
+    """Shows user info like email,username,and total pins created by respective user"""
+    if not current_user.is_admin:
+        abort(403)
+    users = User.query.all()
+    return render_template('user_info.html', users=users)

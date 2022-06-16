@@ -7,6 +7,7 @@ from pinterest.models import Category
 
 
 class NewCategory(FlaskForm):
+    """New Category Form"""
     category_name=StringField('Category Name',validators=[DataRequired(), Length(min=2, max=20)])
     submit = SubmitField('Add')
 

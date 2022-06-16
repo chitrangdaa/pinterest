@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from pinterest import db, login_manager
 from flask_login import UserMixin
@@ -10,14 +12,15 @@ def load_user(user_id):
 
 
 class User(db.Model, UserMixin):
+    """User Model"""
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='profile_pics.jpg')
     password = db.Column(db.String(60), nullable=False)
-    # pins = db.relationship('Pin', backref='author', lazy=True)
-    is_admin = db.Column(db.Boolean(),default=False)
+    pins = db.relationship('Pins', backref='author', lazy=True)
+    is_admin = db.Column(db.Boolean(), default=False)
 
     def get_reset_token(self, expires_sec=1800):
         """for generating token"""
@@ -38,8 +41,22 @@ class User(db.Model, UserMixin):
         return f"User {self.username}"
 
 
-class Category(db.Model,UserMixin):
+class Category(db.Model, UserMixin):
+    """Category Model"""
     __tablename__ = 'category'
-    id=db.Column(db.Integer, primary_key=True)
-    category_name=db.Column(db.String(20), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(20), nullable=False)
+    pins = db.relationship('Pins', backref='category_wise', lazy=True)
 
+
+class Pins(db.Model, UserMixin):
+    """Pin Model"""
+    __tablename__ = 'pins'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(20), nullable=False)
+    pin_content = db.Column(db.String(150), nullable=False)
+    date_created = db.Column(db.DateTime(), default=datetime.utcnow)
+    is_private = db.Column(db.Boolean(), default=False)
+    is_notification_active = db.Column(db.Boolean(), default=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))

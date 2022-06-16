@@ -67,6 +67,7 @@ def logout():
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    """ Update profile """
     form = UpdateForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -100,7 +101,7 @@ def reset_request():
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
-    "for checking if the token still exists and changing password"
+    """for checking if the token still exists and changing password"""
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)

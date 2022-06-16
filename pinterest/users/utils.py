@@ -3,7 +3,12 @@ import secrets
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
+from wtforms import ValidationError
+
 from pinterest import mail
+import re
+
+
 
 
 def save_picture(form_picture):
@@ -30,3 +35,18 @@ def send_reset_email(user):
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
     mail.send(msg)
+
+
+def validate_password(self, field):
+    reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+    # compiling regex
+    pat = re.compile(reg)
+
+    # searching regex
+    mat = re.search(pat, field.data)
+    if not mat:
+        raise ValidationError('Password is wrong,it should contain at least uppercase lowercase a digit !')
+
+
+
+
