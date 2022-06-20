@@ -40,7 +40,9 @@ def create_new():
 @pin.route("/pin/view", methods=['GET'])
 def view_pins():
     """Showing all the pins"""
-    pins = Pins.query.all()
+    #db.pins.filter_by(is_private=False)
+    pins = Pins.query.filter_by(is_private=False)
+
     return render_template('view_pins.html', pins=pins)
 
 
@@ -49,6 +51,7 @@ def view_pins():
 def view_created_pins():
     """ user's created pins"""
     user = User.query.get(current_user.id)
+
     pins = user.pins
     return render_template('createdpins.html', pins=pins)
 
@@ -68,7 +71,6 @@ def delete_pins(pin_id):
 @pin.route("/createdpin/update/<pin_id>", methods=['GET','POST'])
 def update_pins(pin_id):
     """Update pin"""
-
     pin = Pins.query.get_or_404(pin_id)
     form = PinCreation()
     if form.validate_on_submit():
