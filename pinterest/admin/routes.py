@@ -1,8 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
+
+
 from pinterest.admin.forms import NewCategory
 from flask_login import login_required, current_user
 from pinterest import db
-from pinterest.models import Category, User
+from pinterest.models import Category, User, Pins
 
 admin = Blueprint('admin', __name__)
 
@@ -85,7 +87,9 @@ def update_category(category_id):
 @admin.route("/user_info", methods=['GET', 'POST'])
 def view_user_info():
     """Shows user info like email,username,and total pins created by respective user"""
+    #pinnn=db.session.query(Pins.user_id, func.count(Pins.id)).group_by(Pins.user_id).all()
     if not current_user.is_admin:
         abort(403)
     users = User.query.all()
+
     return render_template('user_info.html', users=users)

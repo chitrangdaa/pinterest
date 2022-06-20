@@ -25,12 +25,12 @@ def create_app(config_class=Config):
     from pinterest.users.routes import users
     from pinterest.admin.routes import admin
 
-    # from pinterest.posts.routes import posts
+    from pinterest.pin.routes import pin
     from pinterest.main.routes import main
     # from pinterest.errors.handlers import errors
     app.register_blueprint(users)
     app.register_blueprint(admin)
-    # app.register_blueprint(posts)
+    app.register_blueprint(pin)
     app.register_blueprint(main)
     # app.register_blueprint(errors)
 

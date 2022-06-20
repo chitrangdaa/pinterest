@@ -19,6 +19,12 @@ update{
 .navbar-dark .navbar-brand {
     color: red;
 }
+.dropdown-toggle{
+  color:white;
+}
+.dropdown-toggle:hover{
+  color:navajowhite;
+}
 
 .site-header .navbar-nav .nav-link {
   color: white;

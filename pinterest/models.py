@@ -58,5 +58,13 @@ class Pins(db.Model, UserMixin):
     date_created = db.Column(db.DateTime(), default=datetime.utcnow)
     is_private = db.Column(db.Boolean(), default=False)
     is_notification_active = db.Column(db.Boolean(), default=True)
+    image_file = db.Column(db.String(40))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+
+class SavePin(db.Model, UserMixin):
+    """Save Pins Model"""
+    __tablename__='savepins'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    pin_id = db.Column(db.Integer, db.ForeignKey('pins.id'))

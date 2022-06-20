@@ -4,7 +4,6 @@ from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
 from wtforms import ValidationError
-
 from pinterest import mail
 import re
 
@@ -44,3 +43,4 @@ def validate_password(self, field):
     mat = re.search(pat, field.data)
     if not mat:
         raise ValidationError('Password is wrong,it should contain at least uppercase lowercase a digit !')
+
