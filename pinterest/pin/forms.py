@@ -13,3 +13,10 @@ class PinCreation(FlaskForm):
     is_private = BooleanField('Private Pin?')
     is_notification_active = BooleanField('Notification Active?')
     submit = SubmitField('Post')
+
+
+class PinboardCreation(FlaskForm):
+    """Form for creating a pin board"""
+    pin_board_name = StringField('PinBoard Name', validators=[DataRequired(), Length(min=2, max=80)])
+    board_is_private = BooleanField('Is this board private?')
+    submit = SubmitField('Create')

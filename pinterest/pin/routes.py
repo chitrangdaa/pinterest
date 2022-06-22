@@ -1,8 +1,8 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint, abort
-from pinterest.pin.forms import PinCreation
+from flask import render_template, url_for, flash, redirect, request, Blueprint
+from pinterest.pin.forms import PinCreation, PinboardCreation
 from flask_login import login_required, current_user
 from pinterest import db
-from pinterest.models import Pins, Category, User
+from pinterest.models import Pins, Category, User, Pinboard
 from pinterest.pin.utils import save_picture
 
 pin = Blueprint('pin', __name__)
@@ -40,9 +40,8 @@ def create_new():
 @pin.route("/pin/view", methods=['GET'])
 def view_pins():
     """Showing all the pins"""
-    #db.pins.filter_by(is_private=False)
+    # db.pins.filter_by(is_private=False)
     pins = Pins.query.filter_by(is_private=False)
-
     return render_template('view_pins.html', pins=pins)
 
 
@@ -51,7 +50,6 @@ def view_pins():
 def view_created_pins():
     """ user's created pins"""
     user = User.query.get(current_user.id)
-
     pins = user.pins
     return render_template('createdpins.html', pins=pins)
 
@@ -68,7 +66,7 @@ def delete_pins(pin_id):
 
 
 @login_required
-@pin.route("/createdpin/update/<pin_id>", methods=['GET','POST'])
+@pin.route("/createdpin/update/<pin_id>", methods=['GET', 'POST'])
 def update_pins(pin_id):
     """Update pin"""
     pin = Pins.query.get_or_404(pin_id)
@@ -85,6 +83,23 @@ def update_pins(pin_id):
         form.pin_content.data = pin.pin_content
 
     return render_template('update_pin.html', legend='Update Pin', form=form)
+
+
+@login_required
+@pin.route("/board/create", methods=['GET', 'POST'])
+def create_pin_board():
+    """Creating a pin board"""
+    form = PinboardCreation()
+    if form.validate_on_submit():
+        pinboard = Pinboard(
+            pin_board_name=form.pin_board_name.data,
+            board_is_private=form.board_is_private.data,
+            user_id=current_user.id
+        )
+        db.session.add(pinboard)
+        db.session.commit()
+        flash('Your Pinboard is created', 'success')
+    return render_template('create_board.html', form=form)
 
 # @login_required
 # @pin.route("/pin/save", methods=['GET','POST'])

@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
-        except:
+        except KeyError:
             return None
         return User.query.get(user_id)
 
@@ -62,9 +62,22 @@ class Pins(db.Model, UserMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
+
 class SavePin(db.Model, UserMixin):
     """Save Pins Model"""
-    __tablename__='savepins'
+    __tablename__ = 'savepins'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     pin_id = db.Column(db.Integer, db.ForeignKey('pins.id'))
+
+
+class Pinboard(db.Model, UserMixin):
+    """Pin-board Model"""
+    __tablename__ = 'pinboard'
+    id = db.Column(db.Integer, primary_key=True)
+    pin_board_name = db.Column(db.String(80), nullable=False)
+    board_is_private = db.Column(db.Boolean())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+
