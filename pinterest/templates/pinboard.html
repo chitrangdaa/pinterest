@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 align="center">Your Pin-boards</h2>
+<div class="card-deck">
+
+{% for board in pinboard %}
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="/static/extras/download (1).png" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{board.pin_board_name}}</h5>
+
+    <a href="{{ url_for('pin.view_pins_in_board',board_id=board.id)}}" class="btn btn-primary">{{board.pin_board_name}}</a>
+    <a href="{{ url_for('pin.update_pinboard',board_id=board.id)}}">Update Pinboard</a>
+    <a href="{{ url_for('pin.delete_pinboard',board_id=board.id)}}">Delete Pinboard</a>
+  </div>
+</div>
+{% endfor %}
+  </div>
+{% endblock %}

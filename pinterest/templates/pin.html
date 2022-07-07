@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+{% block content %}
+  <article class="media content-section">
+    <img class="card-img image article-img" src="{{ pin.image_file }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{{url_for('pin.profile',pin_id=pin.id)}}">{{ pin.author.username }}</a>
+
+        <form method="POST" action="">
+			{{form.hidden_tag()}}
+			<fieldset class="form-group">
+
+
+
+        <div class="form-group">
+          <label for="category">
+              Want to add in your pinboard??
+          </label>
+      <select name="category"  id="category" >
+      {% for board in boards%}
+          <option value="{{board.id}}">
+            {{ board.pin_board_name }}
+          </option>
+      {% endfor %}
+      </select>
+
+      </div>
+              <div>
+				{{form.submit(class="btn btn-sm btn-outline-info")}}
+			</div>
+            </fieldset></form>
+      {% if not like%}
+      <a class="btn btn-primary" href="{{url_for('pin.like',pin_id=pin.id)}}" role="button">LIKE</a>
+
+      {% else %}
+      <a class="btn btn-primary" href="{{url_for('pin.unlike',pin_id=pin.id)}}" role="button">UNLIKE</a>
+        {% endif %}
+          <small><b>{{pin.likes.count()}}</b> like</small>
+      </div>
+      <h2 class="article-title">{{ pin.title }}</h2>
+      <p class="article-content">{{ pin.pin_content }}</p>
+     <form method="POST" action="">
+			{{commentform.hidden_tag()}}
+			<fieldset class="form-group">
+				<h2>Comments</h2>
+					<div class="form-group">
+						{{commentform.comment.label(class="form-control-label")}}
+						{%if commentform.comment.errors%}
+						{{commentform.comment(class="form-control form-control-lg is-invalid")}}
+						<div class="invalid-feedback">
+							{% for error in commentform.comment.errors%}
+								<span>{{error}}</span>
+							{%endfor%}
+						</div>
+						{%else%}
+							{{commentform.comment(class="form-control form-control-lg ")}}
+						{%endif%}
+					</div>
+			</fieldset>
+			<div>
+				{{commentform.submit(class="btn btn-outline-info")}}
+			</div>
+		</form>
+        <small><b>{{pin.comments.count() }}</b> comments</small>
+      {% if pin.comments %}
+                {% if pin.comments.count() > 0 %}
+
+
+
+                    <p>
+                    {% for comment in pin.comments %}
+        <article class="media content-section">
+  <img class="rounded-circle comment-img" src="{{  comment.user.image_file }}">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="#">{{ comment.user.username }}</a>
+      <small class="text-muted">{{ comment.date_commented.strftime('%Y-%m-%d') }}</small>
+        <p>{{ comment.comment }}</p>
+
+    </div>
+
+  </div>
+</article>
+
+
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% endif %}
+    </div>
+  </article>
+  <!-- Modal -->
+
+{% endblock content %}

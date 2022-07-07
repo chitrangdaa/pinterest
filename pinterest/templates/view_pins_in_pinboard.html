@@ -9,12 +9,15 @@
             <div class="col-md-12">
                 <div class="card-columns">
 
-                        {% for pin in pins.items%}
+                        {% for pin in pins%}
                         <div class="card card-pin">
                             <div class="image-container">
-                                <a  href="{{url_for('pin.view_detailed_pin',pin_id=pin.id)}}"><img class="card-img image" src="{{pin.image_file}}" alt="{{pin.title}}"></a>
+                                <img class="card-img image" src="{{pin.image_file}}" alt="{{pin.title}}">
                                 <div class="overlay1">
+
                                     <a class="btn image-save btn-success" href="{{ url_for('pin.save_pin',pin_id=pin.id)}}" role="button">Save</a>
+                                    <a class="btn image-save btn-success" href="{{ url_for('pin.remove_pin_from_board',board_id=board_id,pin_id=pin.id)}}" role="button">Remove from this board?</a>
+
                                 </div>
                             </div>
                             <div class="card-body">
@@ -23,23 +26,12 @@
                         </div>
                         {% endfor %}
 
-
                 </div>
 
             </div>
         </div>
     </div>
 </section>
-{% for page_num in pins.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-      {% if page_num %}
-        {% if pins.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('pin.view_pins', page=page_num) }}">{{ page_num }}</a>
-        {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('pin.view_pins', page=page_num) }}">{{ page_num }}</a>
-        {% endif %}
-      {% else %}
-        ...
-      {% endif %}
-    {% endfor %}
+
 
 {% endblock %}

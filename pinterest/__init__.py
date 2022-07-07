@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -11,9 +12,10 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 mail = Mail()
+socketio = SocketIO()
 
 
-def create_app(config_class=Config):
+def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -24,14 +26,16 @@ def create_app(config_class=Config):
 
     from pinterest.users.routes import users
     from pinterest.admin.routes import admin
-
     from pinterest.pin.routes import pin
     from pinterest.main.routes import main
-    # from pinterest.errors.handlers import errors
+    from pinterest.errors.handlers import errors
+    from pinterest.chat.routes import chat
     app.register_blueprint(users)
     app.register_blueprint(admin)
     app.register_blueprint(pin)
     app.register_blueprint(main)
-    # app.register_blueprint(errors)
+    app.register_blueprint(errors)
+    app.register_blueprint(chat)
 
+    socketio.init_app(app)
     return app

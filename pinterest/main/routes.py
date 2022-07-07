@@ -1,16 +1,18 @@
-from flask import render_template,request, Blueprint
+from flask import render_template, Blueprint
 
-# from pinterest.models import Pin
+
+from flask_login import login_required
 
 main = Blueprint('main', __name__)
 
 
-@main.route("/")
+# @main.route("/")
 @main.route("/home")
 def home():
-    return render_template('home.html')
+    return render_template('view_pins.html')
 
 
 @main.route("/about")
+@login_required
 def about():
     return render_template('about.html', title='about')

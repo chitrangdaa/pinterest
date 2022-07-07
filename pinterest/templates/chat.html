@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Chat{{ sender_id }}</title>
+
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="//cdn.socket.io/4.4.1/socket.io.min.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            var socket;
+            $(document).ready(function(){
+                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+                socket.on('connect', function() {
+                    var sender_id = $('#sender_id').val()
+                    var recipient_id = $('#recipient_id').val()
+                    var room = $('#room_name').val()
+                    socket.emit('joined', {room:room, sender_id:sender_id,recipient_id:recipient_id});
+                });
+                socket.on('status', function(data) {
+                    console.log(data)
+                    $('#chat').val($('#chat').val() + data.msg +'\n');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                socket.on('message', function(data) {
+                    console.log(data)
+                    $('#chat').val($('#chat').val() + data.msg + '\n');
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+                $('#text').keypress(function(e) {
+                    var code = e.keyCode || e.which;
+                    if (code == 13) {
+                        text = $('#text').val();
+                        room = $('#room_name').val()
+                        sender_id = $('#sender_id').val()
+                        recipient_id = $('#recipient_id').val()
+                        $('#text').val('');
+                        // socket.emit('text', {msg: text});
+                        socket.emit('text', {msg: text, room:room,sender_id:sender_id,recipient_id:recipient_id});
+                    }
+                });
+            });
+            function leave_room() {
+                socket.emit('left', {}, function() {
+                    socket.disconnect();
+
+                    // go back to the login page
+                    window.location.href = "{{ url_for('main.home') }}";
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Chatroom</h1>
+        <form method="POST">
+            <input type="hidden" value="{{room}}" id="room_name">
+            <input type="hidden" value="{{sender_id}}" id="sender_id">
+            <input type="hidden" value="{{recipient_id}}" id="recipient_id">
+            <textarea id="chat" cols="80" rows="20"></textarea><br><br>
+            <input id="text" size="80" placeholder="Enter your message here"><br><br>
+        </form>
+        <a href="{{ url_for('main.home') }}" onclick="leave_room();">Leave this room</a>
+    </body>
+</html>

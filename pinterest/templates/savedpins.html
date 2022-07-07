@@ -8,18 +8,19 @@
         <div class="row">
             <div class="card-columns">
                 {% for pin in  pins%}
+
                 <div class="card card-pin">
                     <div class="image-container">
                         <img class="card-img image" src="{{pin.image_file}}" alt="{{pin.title}}" >
 
 
-                        <div class="overlay1"><a class="btn btn-danger" href="{{ url_for('pin.delete_pins',pin_id=pin.id)}}" role="button">Delete</a></div>
-                         <div class="overlay1"><a class="btn btn-success" href="{{ url_for('pin.update_pins',pin_id=pin.id)}}" role="button">Update</a></div>
+
 
                     </div>
 
                     <div class="card-body">
-                        <a class="card-link" href="#"><h5 class="card-title title">{{ pin.title }}</h5></a>
+                        <a class="card-link" href="{{url_for('pin.view_detailed_pin',pin_id=pin.id)}}"><h5 class="card-title title">{{ pin.title }}</h5></a>
+                        <a class="btn btn-primary" href="{{url_for('pin.unsave_pin',pin_id=pin.id)}}" role="button">UnSave</a>
                     </div>
                 </div>
                 {% endfor %}

@@ -8,16 +8,26 @@ from pinterest import mail
 import re
 
 
-def save_picture(form_picture):
+def save_picture(form_picture, resize=None):
     random_hex = secrets.token_hex(8)  # to change name of image file uploaded
     _, f_ext = os.path.splitext(form_picture.filename)  # to extract our image's extension
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
-    output_size = (125, 125)  # image resizing
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)  # saving picture in our project static/profile_pictures folder
+
+    if resize:
+        picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
+        output_size = (125, 125)  # image resizing
+        i = Image.open(form_picture)
+        i.thumbnail(output_size)
+        i.save(picture_path)
+    else:
+        picture_path = os.path.join(current_app.root_path, 'static/pin_pics', picture_fn)
+        i = Image.open(form_picture)
+        i.save(picture_path)  # saving picture in our project static/pin_pictures folder
+
+    # saving picture in our project static/profile_pictures folder
     return picture_fn
+
+
 
 
 def send_reset_email(user):
@@ -43,4 +53,3 @@ def validate_password(self, field):
     mat = re.search(pat, field.data)
     if not mat:
         raise ValidationError('Password is wrong,it should contain at least uppercase lowercase a digit !')
-

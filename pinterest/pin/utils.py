@@ -14,3 +14,5 @@ def save_picture(form_picture):
     i.save(picture_path)  # saving picture in our project static/pin_pictures folder
     return picture_fn
 
+
+
