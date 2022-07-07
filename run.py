@@ -4,6 +4,4 @@ from pinterest import create_app, db, socketio
 
 app = create_app()
 migrate = Migrate(app, db)
-
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
+socketio.run(app, debug=True)
