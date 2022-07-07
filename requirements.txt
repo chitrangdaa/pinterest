@@ -2,7 +2,7 @@ alembic==1.8.0
 asgiref==3.5.2
 async-timeout==4.0.2
 attrs==21.4.0
-backports.zoneinfo==0.2.1
+backports.zoneinfo;python_version<"3.9"
 bcrypt==3.2.2
 bidict==0.22.0
 blinker==1.4
