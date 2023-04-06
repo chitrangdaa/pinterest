@@ -10,6 +10,7 @@ def save_picture(form_picture):
     _, f_ext = os.path.splitext(form_picture.filename)  # to extract our image's extension
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path, 'static/pin_pics', picture_fn)
+    print(f'----picture path---{picture_path}')
     i = Image.open(form_picture)
     i.save(picture_path)  # saving picture in our project static/pin_pictures folder
     return picture_fn

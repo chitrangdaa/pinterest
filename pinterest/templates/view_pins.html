@@ -12,7 +12,7 @@
                         {% for pin in pins.items%}
                         <div class="card card-pin">
                             <div class="image-container">
-                                <a  href="{{url_for('pin.view_detailed_pin',pin_id=pin.id)}}"><img class="card-img image" src="{{pin.image_file}}" alt="{{pin.title}}"></a>
+                                <a  href="{{url_for('pin.view_detailed_pin',pin_id=pin.id)}}"><img class="card-img image" src="/static/pin_pics/{{pin.image_file}}" alt="{{pin.title}}"></a>
                                 <div class="overlay1">
                                     <a class="btn image-save btn-success" href="{{ url_for('pin.save_pin',pin_id=pin.id)}}" role="button">Save</a>
                                 </div>

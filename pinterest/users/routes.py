@@ -5,8 +5,8 @@ from pinterest import db, bcrypt
 from pinterest.models import User
 from pinterest.users.forms import (RegistrationForm, LoginForm,
                                    RequestResetForm, ResetPasswordForm, UpdateForm, ChangePasswordForm)
-from pinterest.users.utils import send_reset_email
-import cloudinary.uploader
+from pinterest.users.utils import send_reset_email, save_picture
+#import cloudinary.uploader
 
 users = Blueprint('users', __name__)
 
@@ -85,8 +85,9 @@ def account():
     form = UpdateForm()
     if form.validate_on_submit():
         if form.picture.data:
-            upload_result = cloudinary.uploader.upload(form.picture.data, folder="Profile_Pics")
-            current_user.image_file = upload_result['url']
+            picture_file = save_picture(form.picture.data)
+            #upload_result = cloudinary.uploader.upload(form.picture.data, folder="Profile_Pics")
+            current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
@@ -95,7 +96,8 @@ def account():
     elif request.method == 'GET':  # for showing current data
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('account.html', title='account', image_file=current_user.image_file, form=form)
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('account.html', title='account', image_file=image_file, form=form)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

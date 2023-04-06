@@ -28,8 +28,6 @@ def save_picture(form_picture, resize=None):
     return picture_fn
 
 
-
-
 def send_reset_email(user):
     """for sending reset email to user"""
     token = user.get_reset_token()

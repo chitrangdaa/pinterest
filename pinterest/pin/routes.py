@@ -3,7 +3,9 @@ from pinterest.pin.forms import PinCreation, PinboardCreation, AddPinToPinboard,
 from flask_login import login_required, current_user
 from pinterest import db
 from pinterest.models import Pins, Category, User, Pinboard, SavePin, Board_of_Pins, Vote, Comments
-import cloudinary.uploader
+#import cloudinary.uploader
+
+from pinterest.pin.utils import save_picture
 
 pin = Blueprint('pin', __name__)
 
@@ -15,7 +17,9 @@ def create_new():
     category_data = Category.query.all()
     form = PinCreation()
     if form.validate_on_submit():
-        upload_result = cloudinary.uploader.upload(form.picture.data, folder="Pins")
+        picture_file = save_picture(form.picture.data)
+        #upload_result = cloudinary.uploader.upload(form.picture.data, folder="Pins")
+        #print(f'------upload result---{upload_result}')
 
         pin = Pins(
             title=form.title.data,
@@ -23,7 +27,7 @@ def create_new():
             is_private=form.is_private.data,
             author=current_user,
             category_id=request.form.get("category"),
-            image_file=upload_result['url']
+            image_file=picture_file
         )
         db.session.add(pin)
         db.session.commit()

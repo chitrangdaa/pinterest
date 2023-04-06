@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
   <article class="media content-section">
-    <img class="card-img image article-img" src="{{ pin.image_file }}">
+    <img class="card-img image article-img" src="/static/pin_pics/{{ pin.image_file }}">
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{{url_for('pin.profile',pin_id=pin.id)}}">{{ pin.author.username }}</a>
